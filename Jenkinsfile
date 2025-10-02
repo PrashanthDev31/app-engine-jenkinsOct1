@@ -17,35 +17,37 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    # Update apt package list
-                     sudo apt-get update -y
+                        # Update apt package list
+                        sudo apt-get update -y
                     
-                    # Install Python3 and development tools if not installed
-                    sudo apt-get install -y python3-pip python3-dev python3-venv bash
+                        # Install Python3 and development tools if not installed
+                        sudo apt-get install -y python3-pip python3-dev python3-venv bash
                     
-                 # Create a virtual environment
-                     python3 -m venv venv
+                        # Create a virtual environment
+                        python3 -m venv venv
                     
-                    # Activate the virtual environment
-                    . venv/bin/activate  # Using dot (.) instead of 'source'
+                        # Activate the virtual environment
+                        . venv/bin/activate  # Using dot (.) instead of 'source'
                     
-                     # Upgrade pip inside the virtual environment
-                     pip install --upgrade pip
+                        # Upgrade pip inside the virtual environment
+                        pip install --upgrade pip
                     
-                     # Install dependencies from requirements.txt
-                    pip install -r requirements.txt
-                     '''
-                 }
+                        # Install dependencies from requirements.txt
+                        pip install -r requirements.txt
+                    '''
+                }
             }
-         }
+        }
 
         stage('Deploy to Google App Engine') {
             steps {
                 script {
-                    // Check gcloud installation and working directory
+                    // Verify gcloud installation
                     sh 'gcloud --version'
+                    
+                    // Show working directory and files
                     sh 'pwd'
-                    sh 'ls -l'  // List files to verify app.yaml presence
+                    sh 'ls -l'
 
                     // Authenticate with Google Cloud
                     sh 'gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}'
@@ -63,7 +65,9 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            cleanWs()  // Cleans workspace
+            node {
+                cleanWs()   // Must be inside node
+            }
         }
 
         success {
