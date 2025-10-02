@@ -27,7 +27,7 @@ pipeline {
                         python3 -m venv venv
                     
                         # Activate the virtual environment
-                        . venv/bin/activate  # Using dot (.) instead of 'source'
+                        . venv/bin/activate
                     
                         # Upgrade pip inside the virtual environment
                         pip install --upgrade pip
@@ -42,10 +42,7 @@ pipeline {
         stage('Deploy to Google App Engine') {
             steps {
                 script {
-                    // Verify gcloud installation
                     sh 'gcloud --version'
-                    
-                    // Show working directory and files
                     sh 'pwd'
                     sh 'ls -l'
 
@@ -65,9 +62,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            node {
-                cleanWs()   // Must be inside node
-            }
+            cleanWs()   // no node wrapper needed
         }
 
         success {
