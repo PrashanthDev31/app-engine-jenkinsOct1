@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_ID = 'rock-position-455809-m2'
+        PROJECT_ID = 'testapp-472401'
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account')  // Service account credential
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/AneilRapole/app-engine-Jenkins.git'
+                git branch: 'main', url: 'https://github.com/PrashanthDev31/app-engine-jenkinsOct1'
             }
         }
 
